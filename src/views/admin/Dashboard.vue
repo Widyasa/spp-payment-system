@@ -1,23 +1,18 @@
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-  import {useRouter} from "vue-router";
 import axios from "axios";
+import router from "@/router";
 
-  const token = localStorage.getItem('token')
-  const router = useRouter()
+  const token = ref(localStorage.getItem('token'))
   const getDataDashboard = async () => {
     console.log('testing')
   }
-  onMounted(async () => {
-    if (token.value) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
-      await getDataDashboard()
-    }
-  })
-  onMounted(() => {
+  onMounted( () => {
     if (!token.value) {
       router.push({name: 'login'})
-      // console.log('gada nok')
+    } else {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
+      getDataDashboard()
     }
   })
 </script>

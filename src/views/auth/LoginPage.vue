@@ -16,19 +16,19 @@ const route = useRouter()
     password: ""
   } as User)
 // // Add a Custom Validation type to fix object not found type checking error
-// type ValidationType = {
-//     username: boolean;
-//     password: boolean
-// }
+type ValidationType = {
+    username: boolean;
+    password: boolean
+}
 
 const validation = reactive([]);
 const loginFailed = ref(false);
 
-// onMounted(() => {
-//   if (token.value) {
-//     router.push({ name: 'dashboard' });
-//   }
-// });
+onMounted(() => {
+  if (token.value) {
+    router.push({ name: 'dashboard' });
+  }
+});
 
 const login = async () => {
     if (userState.username && userState.password) {
