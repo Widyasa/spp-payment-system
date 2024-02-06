@@ -4,13 +4,17 @@ import type {User} from "@/stores/User";
 import {useUserStore} from "@/stores/User";
 import {useRouter} from "vue-router";
 import router from "@/router";
+import {token} from "@/helpers/global";
+import axios from "axios";
+import {storeToRefs} from "pinia";
+// import {jwtDecode, JwtDecodeOptions} from "jwt-decode";
 // import router from "@/router";
 
-const route = useRouter()
 
-  const loggedIn = ref(localStorage.getItem('loggedIn'))
-  const token = ref(localStorage.getItem('token'))
-  const {getLoginCookie, loginUser} = useUserStore()
+const route = useRouter()
+const loggedIn = ref(localStorage.getItem('loggedIn'))
+const {getLoginCookie, loginUser, getDataDashboard} = useUserStore()
+const {dashboardList} = storeToRefs(useUserStore())
   let userState = reactive({
     username: "",
     password: ""
@@ -23,35 +27,45 @@ type ValidationType = {
 
 const validation = reactive([]);
 const loginFailed = ref(false);
-
-onMounted(() => {
-  if (token.value) {
-    router.push({ name: 'dashboard' });
+const dataUser = async () => {
+  try{
+    const response = await getDataDashboard()
+    const {data} = response.data
+    dashboardList.value = data
+    localStorage.setItem('role', dashboardList.value.user.role)
+    return true
+  } catch (error:any) {
+    console.error("API Error:", error.message)
+    return false
   }
-});
+}
+
+
+// onMounted(() => {
+//   if (token.value) {
+//     // router.push({ name: 'dashboard' });
+//   }
+// });
 
 const login = async () => {
     if (userState.username && userState.password) {
       try {
         const cookie = await getLoginCookie();
-        console.log(cookie)
         const {data} = await loginUser(userState)
-        console.log(data.message)
         if (data.message === 'success') {
-          localStorage.setItem('LoggedIn', 'true')
+          axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.token}`
           localStorage.setItem('token', data.data.token)
-          loggedIn.value = String(true)
-          // router.onError(e => {console.log(e)})
-          // return router.push({name : 'dashboard'})
+          await dataUser()
+          // location.reload()
           return route.push("/")
-
-
+          // return console.log('sukses login')
         } else {
           loginFailed.value = true;
           console.log('error')
         }
-      } catch (error) {
-        console.error(error);
+      } catch (error:any) {
+        console.log(error);
+        console.log('error')
       }
     } else {
       if (!userState.username) {
