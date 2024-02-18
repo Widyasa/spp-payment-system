@@ -3,7 +3,6 @@ import Dashboard from "@/views/admin/Dashboard.vue";
 import LoginPage from "@/views/auth/LoginPage.vue";
 import SiswaIndex from "@/views/admin/Siswa/SiswaIndex.vue";
 import {admin, petugas, token} from "@/helpers/global";
-import {isAdminPetugas} from "@/helpers/authValidation";
 const pengurus = admin || petugas
 
 const router = createRouter({
@@ -12,20 +11,24 @@ const router = createRouter({
     {
       path: '/',
       redirect:'/dashboard',
-      meta: {isPrivate: true, isAdmin:false}
+      component: ()=>import('../views/layouts/Main.vue'),
+      meta: {isPrivate: true, isAdmin:false},
+      children:[
+        {
+          path:'/dashboard',
+          name:'dashboard',
+          component: Dashboard,
+          meta: {isPrivate: true, isAdmin:false}
+        },
+        {
+          path:'/siswa',
+          name:'siswa',
+          component: SiswaIndex,
+          meta: {isPrivate: true, isPetugas:true},
+        },
+      ]
     },
-    {
-      path:'/dashboard',
-      name:'dashboard',
-      component: Dashboard,
-      meta: {isPrivate: true, isAdmin:false}
-    },
-    {
-      path:'/siswa',
-      name:'siswa',
-      component: SiswaIndex,
-      meta: {isPrivate: true, isPetugas:true}
-    },
+
     {
       path: '/login',
       name: 'login',
