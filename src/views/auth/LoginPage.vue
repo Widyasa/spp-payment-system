@@ -6,23 +6,26 @@ import {useRouter} from "vue-router";
 import router from "@/router";
 import axios from "axios";
 import {storeToRefs} from "pinia";
+import PrimaryButton from "@/components/PrimaryButton.vue";
 
 const token = ref(localStorage.getItem('token'))
 const route = useRouter()
-const loggedIn = ref(localStorage.getItem('loggedIn'))
 const {getLoginCookie, loginUser, getDataDashboard} = useUserStore()
 const {dashboardList} = storeToRefs(useUserStore())
   let userState = reactive({
     username: "",
     password: ""
   } as User)
-// // Add a Custom Validation type to fix object not found type checking error
-type ValidationType = {
-    username: boolean;
-    password: boolean
-}
 
-const validation = reactive([]);
+const loginValidation = ref(false)
+const usernameValidation = ref(false)
+const passwordValidation = ref(false)
+window.setInterval(() => {
+  usernameValidation.value = false;
+  passwordValidation.value = false;
+  loginValidation.value = false;
+}, 5000);
+
 const loginFailed = ref(false);
 const dataUser = async () => {
   try{
@@ -39,6 +42,8 @@ const dataUser = async () => {
 
 const login = async () => {
     if (userState.username && userState.password) {
+      usernameValidation.value = false
+      passwordValidation.value = false
       try {
         const cookie = await getLoginCookie();
         const {data} = await loginUser(userState)
@@ -48,20 +53,21 @@ const login = async () => {
           location.reload()
           return router.push({name: 'dashboard'})
         } else {
-          loginFailed.value = true;
           console.log('error')
         }
       } catch (error:any) {
+        loginValidation.value = true
         console.log(error);
         console.log('error')
       }
-    } else {
-      if (!userState.username) {
-        validation.username = true;
-      }
-      if (!userState.password) {
-        validation.password = true;
-      }
+    }
+    else if (!userState.username){
+      usernameValidation.value = true
+    } else if (!userState.password) {
+      passwordValidation.value = true
+    } else{
+      usernameValidation.value = true
+      passwordValidation.value = true
     }
   };
 
@@ -69,14 +75,29 @@ const login = async () => {
 </script>
 
 <template>
-  <form @submit.prevent="login" class="">
-    <RouterLink :to="{name: 'dashboard'}">dashboard</RouterLink>
-    <input type="text" name="username" v-model="userState.username" placeholder="username">
-    <input type="text" name="password" v-model="userState.password" placeholder="password">
-    <button type="submit">submit</button>
-  </form>
+  <div class="form-login">
+    <div class="d-block">
+      <h6 class="text-primary" v-show="loginValidation">Login error periksa kembali username dan password anda</h6>
+      <form @submit.prevent="login" class="d-flex flex-column gap-3">
+        <div class="">
+          <input type="text" v-model="userState.username" class="form-control" placeholder="username">
+          <p class="text-danger" v-show="usernameValidation">username kosong</p>
+        </div>
+        <div class="">
+          <input type="password" v-model="userState.password" class="form-control" placeholder="password">
+          <p class="text-danger" v-show="usernameValidation">password kosong</p>
+        </div>
+        <PrimaryButton title="submit" button_type="submit"/>
+      </form>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-
+  .form-login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
 </style>
