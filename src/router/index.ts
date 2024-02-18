@@ -2,8 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from "@/views/admin/Dashboard.vue";
 import LoginPage from "@/views/auth/LoginPage.vue";
 import SiswaIndex from "@/views/admin/Siswa/SiswaIndex.vue";
-import {admin, token} from "@/helpers/global";
-
+import {admin, petugas, token} from "@/helpers/global";
+import {isAdminPetugas} from "@/helpers/authValidation";
+const pengurus = admin || petugas
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,7 +24,7 @@ const router = createRouter({
       path:'/siswa',
       name:'siswa',
       component: SiswaIndex,
-      meta: {isPrivate: true, isAdmin:true}
+      meta: {isPrivate: true, isPetugas:true}
     },
     {
       path: '/login',
@@ -42,6 +43,9 @@ router.beforeEach(async (to, from) => {
     return {name:"dashboard"}
   }
   if (!admin && to.meta.isAdmin) {
+    return {name:"dashboard"}
+  }
+  if (!pengurus && to.meta.isPetugas) {
     return {name:"dashboard"}
   }
 
