@@ -19,45 +19,29 @@ async function receiveDataUser() {
   }
 }
 console.log(token)
-// const dataUser = async () => {
-//   try{
-//     const response = await getDataDashboard()
-//     const {data} = response.data
-//     dashboardList.value = data
-//     console.log(dashboardList.value.user.role)
-//     localStorage.setItem('role', dashboardList.value.user.role)
-//   } catch (error:any) {
-//     console.error("API Error:", error.message)
-//   }
-// }
 
-if (!token.value){
-  router.push({name:'login'})
-} else {
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
-  await receiveDataUser()
-}
 
   onMounted( () => {
-    // console.log(token.value)
     if (!token.value) {
       // router.push({name: 'login'})
     }
-    // else {
-    //   axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
-    //   dataUser()
-    // }
+    else {
+      console.log(token.value)
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
+      receiveDataUser()
+    }
   })
 
   const logout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('role')
+    location.reload()
     return router.push({name: 'login'})
   }
 </script>
 
 <template>
-  <h1>this is dashboard</h1>
+  <h1 style="color: white">this is dashboard</h1>
   <button @click="logout">Logout</button>
   <RouterLink :to="{name:'siswa'}" v-show="admin">siswa</RouterLink>
 </template>

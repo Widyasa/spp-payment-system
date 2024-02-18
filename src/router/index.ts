@@ -11,39 +11,39 @@ const router = createRouter({
     {
       path: '/',
       redirect:'/dashboard',
-      // meta: {isPrivate: true, isAdmin:false}
+      meta: {isPrivate: true, isAdmin:false}
     },
     {
       path:'/dashboard',
       name:'dashboard',
       component: Dashboard,
-      // meta: {isPrivate: true, isAdmin:false}
+      meta: {isPrivate: true, isAdmin:false}
     },
     {
       path:'/siswa',
       name:'siswa',
       component: SiswaIndex,
-      // meta: {isPrivate: true, isAdmin:true}
+      meta: {isPrivate: true, isAdmin:true}
     },
     {
       path: '/login',
       name: 'login',
       component: LoginPage,
-      // meta: {isPrivate: false, isAdmin: false}
+      meta: {isPrivate: false, isAdmin: false}
     }
   ]
 })
 
-// router.beforeEach(async (to, from) => {
-//   if (!token.value && to.meta.isPrivate) {
-//     return {name: "login"}
-//   }
-//   if (token.value && !to.meta.isPrivate) {
-//     return {name:"dashboard"}
-//   }
-//   if (!admin && to.meta.isAdmin) {
-//     return {name:"dashboard"}
-//   }
-//
-// })
+router.beforeEach(async (to, from) => {
+  if (!token.value && to.meta.isPrivate) {
+    return {name: "login"}
+  }
+  if (token.value && !to.meta.isPrivate) {
+    return {name:"dashboard"}
+  }
+  if (!admin && to.meta.isAdmin) {
+    return {name:"dashboard"}
+  }
+
+})
 export default router

@@ -39,7 +39,6 @@ export const userApiStore = defineStore('userApiStore', () => {
 
 export const useUserStore = defineStore('useUserStore' , () => {
     const user = ref<User> ({} as User)
-    const userList = ref<User[]>([] as User[])
     const dashboardList = ref<Dashboard>({} as Dashboard)
     const {getCookie, login, getAll} = userApiStore()
     async function getLoginCookie() {
@@ -53,5 +52,5 @@ export const useUserStore = defineStore('useUserStore' , () => {
     async function getDataDashboard() {
         return await getAll('dashboard')
     }
-    return {getLoginCookie, loginUser, getDataDashboard , user, userList, dashboardList}
+    return {getLoginCookie, loginUser, getDataDashboard , user, dashboardList}
 })

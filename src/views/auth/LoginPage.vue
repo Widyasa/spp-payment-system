@@ -4,13 +4,10 @@ import type {User} from "@/stores/User";
 import {useUserStore} from "@/stores/User";
 import {useRouter} from "vue-router";
 import router from "@/router";
-import {token} from "@/helpers/global";
 import axios from "axios";
 import {storeToRefs} from "pinia";
-// import {jwtDecode, JwtDecodeOptions} from "jwt-decode";
-// import router from "@/router";
 
-
+const token = ref(localStorage.getItem('token'))
 const route = useRouter()
 const loggedIn = ref(localStorage.getItem('loggedIn'))
 const {getLoginCookie, loginUser, getDataDashboard} = useUserStore()
@@ -32,7 +29,7 @@ const dataUser = async () => {
     const response = await getDataDashboard()
     const {data} = response.data
     dashboardList.value = data
-    localStorage.setItem('role', dashboardList.value.user.role)
+
     return true
   } catch (error:any) {
     console.error("API Error:", error.message)
@@ -40,25 +37,16 @@ const dataUser = async () => {
   }
 }
 
-
-// onMounted(() => {
-//   if (token.value) {
-//     // router.push({ name: 'dashboard' });
-//   }
-// });
-
 const login = async () => {
     if (userState.username && userState.password) {
       try {
         const cookie = await getLoginCookie();
         const {data} = await loginUser(userState)
         if (data.message === 'success') {
-          axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.token}`
           localStorage.setItem('token', data.data.token)
-          await dataUser()
-          // location.reload()
-          return route.push("/")
-          // return console.log('sukses login')
+          localStorage.setItem('role', data.data.user.role)
+          location.reload()
+          return router.push({name: 'dashboard'})
         } else {
           loginFailed.value = true;
           console.log('error')
