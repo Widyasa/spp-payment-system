@@ -32,7 +32,6 @@ async function receiveDataUser() {
     }
     else {
       console.log(token.value)
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token.value}`
       receiveDataUser()
     }
   })
