@@ -4,7 +4,7 @@ import Sidebar from "@/components/Sidebar.vue";
 </script>
 
 <template>
-  <div class="row">
+  <div class="row template-row">
     <div class="col-2">
       <Sidebar />
     </div>
@@ -15,5 +15,7 @@ import Sidebar from "@/components/Sidebar.vue";
 </template>
 
 <style scoped>
-
+.template-row{
+  width: 100vw;
+}
 </style>

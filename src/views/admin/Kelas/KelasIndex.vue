@@ -2,10 +2,23 @@
 import {useKelasStore} from "@/stores/Kelas";
 import {storeToRefs} from "pinia";
 import {onMounted, ref} from "vue";
+import PrimaryButton from "@/components/PrimaryButton.vue";
+import CreateKelas from "@/views/admin/Kelas/CreateKelas.vue";
 
 const {getAllKelas} = useKelasStore()
 const {kelas, kelasList} = storeToRefs(useKelasStore())
-const isLoading = ref(false)
+const isShowFormAdd = ref(false)
+const isShowFormEdit = ref(false)
+const showFromAdd = () => {
+  isShowFormAdd.value = true
+  isShowFormEdit.value = false
+}
+
+const showFromEdit = (obj) => {
+  isShowFormEdit.value = true
+  isShowFormAdd.value = false
+  kelas.value = obj
+}
 const getKelasModel = async ()  => {
   try {
     const response = await getAllKelas()
@@ -22,6 +35,10 @@ onMounted(() => {
 </script>
 
 <template>
+  <button type="button" class="btn btn-primary" @click="showFromAdd()" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+  </button>
+  <PrimaryButton title="tambah kelas"  class="mt-5"/>
   <table class="table table-border">
     <thead>
     <tr>
@@ -52,6 +69,9 @@ onMounted(() => {
     </tr>
     </tbody>
   </table>
+  <div class="" v-if="isShowFormAdd">
+    <CreateKelas />
+  </div>
 </template>
 
 <style scoped>
