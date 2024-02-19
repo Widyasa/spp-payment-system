@@ -17,12 +17,12 @@ const logout = () => {
         <RouterLink class="nav" :to="{name: 'dashboard'}" active-class="active">Dashboard</RouterLink>
       </li>
       <li class="nav-link" v-show="admin || petugas">
-        <RouterLink class="nav" :to="{name: 'siswa'}">Siswa</RouterLink>
+        <RouterLink class="nav" :to="{name: 'siswa'}" active-class="active">Siswa</RouterLink>
       </li>
       <li class="nav-link" v-show="admin || petugas">
-        <RouterLink class="nav" :to="{name: 'siswa'}">Kelas</RouterLink>
+        <RouterLink class="nav" :to="{name: 'kelas'}" active-class="active">Kelas</RouterLink>
       </li>
-      <li class="nav-link">
+      <li class="nav-link mt-5">
         <button @click="logout" class="btn btn-primary">Logout</button>
       </li>
     </ul>
