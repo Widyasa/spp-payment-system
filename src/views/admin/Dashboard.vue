@@ -5,20 +5,25 @@ import router from "@/router";
 import {useUserStore} from "@/stores/User";
 import {storeToRefs} from "pinia";
 import {admin, token} from "@/helpers/global";
+import {useDashboardStore} from "@/stores/Dashboard";
 
 const {getLoginCookie, loginUser, getDataDashboard} = useUserStore()
-const {dashboardList} = storeToRefs(useUserStore())
+const {dashboardList} = storeToRefs(useDashboardStore())
 
 async function receiveDataUser() {
   try {
     const response = await getDataDashboard()
     const {data} = response.data
     dashboardList.value = data
+    dashboardList.value.nama = data.user.nama
+    dashboardList.value.countKelas = data.countKelas[0].countKelas
+    dashboardList.value.countSiswa = data.countSiswa[0].countSiswa
+    dashboardList.value.countPetugas = data.countPetugas[0].countPetugas
+
   } catch (error) {
     console.error("API Error:", error.message)
   }
 }
-console.log(token)
 
 
   onMounted( () => {
@@ -32,18 +37,15 @@ console.log(token)
     }
   })
 
-  const logout = () => {
-    localStorage.removeItem('token')
-    localStorage.removeItem('role')
-    location.reload()
-    return router.push({name: 'login'})
-  }
+
 </script>
 
 <template>
-  <h1 style="color: white">this is dashboard</h1>
-  <button @click="logout">Logout</button>
-  <RouterLink :to="{name:'siswa'}" v-show="admin">siswa</RouterLink>
+  <h1>Nama yang Login: {{dashboardList.nama}}</h1>
+  <h1>Total Kelas: {{dashboardList.countKelas}}</h1>
+  <h1>Total Siswa: {{dashboardList.countSiswa}}</h1>
+  <h1>Total Petugas: {{dashboardList.countPetugas}}</h1>
+  <h1 style="color: black">this is dashboard</h1>
 </template>
 
 <style scoped>
