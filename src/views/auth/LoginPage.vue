@@ -10,8 +10,7 @@ import PrimaryButton from "@/components/PrimaryButton.vue";
 
 const token = ref(localStorage.getItem('token'))
 const route = useRouter()
-const {getLoginCookie, loginUser, getDataDashboard} = useUserStore()
-const {dashboardList} = storeToRefs(useUserStore())
+const {getLoginCookie, loginUser} = useUserStore()
   let userState = reactive({
     username: "",
     password: ""
@@ -27,18 +26,7 @@ window.setInterval(() => {
 }, 5000);
 
 const loginFailed = ref(false);
-const dataUser = async () => {
-  try{
-    const response = await getDataDashboard()
-    const {data} = response.data
-    dashboardList.value = data
 
-    return true
-  } catch (error:any) {
-    console.error("API Error:", error.message)
-    return false
-  }
-}
 
 const login = async () => {
     if (userState.username && userState.password) {
@@ -89,6 +77,7 @@ const login = async () => {
         </div>
         <PrimaryButton title="submit" button_type="submit"/>
       </form>
+      <p>{{userState.username}}</p>
     </div>
   </div>
 </template>
