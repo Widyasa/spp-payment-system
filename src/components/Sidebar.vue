@@ -1,6 +1,13 @@
 <script setup lang="ts">
 
 import {admin, petugas} from "@/helpers/global";
+import router from "@/router";
+const logout = () => {
+  localStorage.removeItem('token')
+  localStorage.removeItem('role')
+  location.reload()
+  return router.push({name: 'login'})
+}
 </script>
 
 <template>
@@ -14,6 +21,9 @@ import {admin, petugas} from "@/helpers/global";
       </li>
       <li class="nav-link" v-show="admin || petugas">
         <RouterLink class="nav" :to="{name: 'siswa'}">Kelas</RouterLink>
+      </li>
+      <li class="nav-link">
+        <button @click="logout" class="btn btn-primary">Logout</button>
       </li>
     </ul>
   </div>
