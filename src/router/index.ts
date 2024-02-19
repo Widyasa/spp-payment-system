@@ -17,15 +17,22 @@ const router = createRouter({
         {
           path:'/dashboard',
           name:'dashboard',
-          component: Dashboard,
+          component: ()=>import('../views/admin/Dashboard.vue'),
           meta: {isPrivate: true, isAdmin:false}
         },
         {
           path:'/siswa',
           name:'siswa',
-          component: SiswaIndex,
+          component: ()=>import('../views/admin/Siswa/SiswaIndex.vue'),
           meta: {isPrivate: true, isPetugas:true},
         },
+        {
+          path:'/kelas',
+          name:'kelas',
+          component: ()=>import('../views/admin/Kelas/KelasIndex.vue'),
+          meta: {isPrivate: true, isPetugas:true},
+        },
+
       ]
     },
 
