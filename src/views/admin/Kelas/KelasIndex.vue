@@ -5,40 +5,41 @@ import {onMounted, ref} from "vue";
 import PrimaryButton from "@/components/PrimaryButton.vue";
 import CreateKelas from "@/views/admin/Kelas/CreateKelas.vue";
 
+const response = ref(false)
+const messageResponse = localStorage.getItem('message')
 const {getAllKelas} = useKelasStore()
 const {kelas, kelasList} = storeToRefs(useKelasStore())
-const isShowFormAdd = ref(false)
-const isShowFormEdit = ref(false)
-const showFromAdd = () => {
-  isShowFormAdd.value = true
-  isShowFormEdit.value = false
-}
-
-const showFromEdit = (obj) => {
-  isShowFormEdit.value = true
-  isShowFormAdd.value = false
-  kelas.value = obj
-}
 const getKelasModel = async ()  => {
   try {
     const response = await getAllKelas()
     const {data, message} = response.data
     kelasList.value = data.kelases
     console.log(message)
-  } catch (error) {
-    console.error('api error', error.message)
+  } catch (e) {
+    console.error('api error', e?.message)
   }
 }
 onMounted(() => {
   getKelasModel()
 })
+const showForm = () => {
+  if (messageResponse != null){
+    response.value = true
+    setInterval(() => {
+      localStorage.removeItem('mesaage')
+      response.value = false
+    }, 3000)
+  }
+  getKelasModel()
+}
+
+
 </script>
 
 <template>
-  <button type="button" class="btn btn-primary" @click="showFromAdd()" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Launch demo modal
-  </button>
-  <PrimaryButton title="tambah kelas"  class="mt-5"/>
+  <h3 class="text-success" v-show="response">{{messageResponse}}</h3>
+  <PrimaryButton type="button" class="mt-5"  data-bs-toggle="modal" data-bs-target="#modalKelasCreate" title="Tambah Kelas" />
+
   <table class="table table-border">
     <thead>
     <tr>
@@ -53,10 +54,10 @@ onMounted(() => {
       <td>{{ index+1 }}</td>
       <td>{{ kelas.nama }}</td>
       <td>{{ kelas.kompetensi_keahlian }}</td>
-      <!--      <td>-->
-      <!--        <button @click="showFromEdit(subject)">edit</button>-->
-      <!--        <button @click="deleteSubjectModel(subject.id)">delete</button>-->
-      <!--      </td>-->
+            <td>
+              <button>edit</button>
+              <button>delete</button>
+            </td>
     </tr>
     </tbody>
     <tbody v-else>
@@ -69,8 +70,8 @@ onMounted(() => {
     </tr>
     </tbody>
   </table>
-  <div class="" v-if="isShowFormAdd">
-    <CreateKelas />
+  <div class="" >
+    <CreateKelas @list-kelas="showForm()"/>
   </div>
 </template>
 
