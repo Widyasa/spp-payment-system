@@ -4,6 +4,7 @@ import {apiUrl} from "@/helpers/global";
 import {ref} from "vue";
 
 export interface Kelas {
+    id:string
     nama: string
     kompetensi_keahlian: string
 }
@@ -15,8 +16,8 @@ export const kelasApiStore = defineStore('kelasApiStore', () => {
     async function postUpdate(request:object, id:string, pathUrl:string) {
         return await axios.put(apiUrl + pathUrl + `/${id}`, request)
     }
-    async function postDelete(id:string, pathUrl:string) {
-        return await axios.delete(apiUrl + pathUrl + `/${id}`)
+    async function postDelete(id:any, pathUrl:string) {
+        return await axios.post(apiUrl + pathUrl + `/${id}`)
     }
     async function getById(id:string, pathUrl:string) {
         return await axios.get(apiUrl + pathUrl + `/${id}`)
