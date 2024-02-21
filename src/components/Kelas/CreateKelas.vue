@@ -14,6 +14,8 @@ const createKelasModel = async () => {
     const {data, message} = response.data
     console.log(response.data.message)
     if (response.status == 200) {
+      kelasState.nama = ''
+      kelasState.kompetensi_keahlian = ''
       emit('list-kelas')
       localStorage.setItem('message', response.data.message)
     }
