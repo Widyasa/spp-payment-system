@@ -1,6 +1,23 @@
 <script setup lang="ts">
-  const deleteKelasModel = () => {
 
+import {useKelasStore} from "@/stores/Kelas";
+import {storeToRefs} from "pinia";
+import {ref} from "vue";
+const id = defineProps(['kelasId'])
+
+const {deleteKelas} = useKelasStore()
+const emit = defineEmits(['list-kelas'])
+  const deleteKelasModel = async () => {
+    try {
+      const response = await deleteKelas(id.kelasId)
+      const {data, message} = response.data
+      if (response.status == 200) {
+        emit('list-kelas')
+        localStorage.setItem('message', response.data.message)
+      }
+    } catch (error) {
+      console.error(error?.message)
+    }
   }
 </script>
 
