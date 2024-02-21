@@ -3,8 +3,11 @@ import {useKelasStore} from "@/stores/Kelas";
 import {storeToRefs} from "pinia";
 import {onMounted, ref} from "vue";
 import PrimaryButton from "@/components/PrimaryButton.vue";
-import CreateKelas from "@/views/admin/Kelas/CreateKelas.vue";
+import CreateKelas from "@/components/Kelas/CreateKelas.vue";
+import DeleteKelas from "@/components/Kelas/DeleteKelas.vue";
 
+
+const id = ref('')
 const response = ref(false)
 const messageResponse = localStorage.getItem('message')
 const {getAllKelas} = useKelasStore()
@@ -32,7 +35,9 @@ const showForm = () => {
   }
   getKelasModel()
 }
-
+const saveKelasId = (kelasId:string) => {
+  id.value = kelasId
+}
 
 </script>
 
@@ -44,6 +49,7 @@ const showForm = () => {
     <thead>
     <tr>
       <th>No.</th>
+      <th>id</th>
       <th>Nama</th>
       <th>Kompetensi Keahlian</th>
       <th>Actions</th>
@@ -52,11 +58,12 @@ const showForm = () => {
     <tbody v-if="kelasList.length > 0">
     <tr v-for="(kelas, index) in kelasList" :key="kelas.id">
       <td>{{ index+1 }}</td>
+      <td>{{kelas.id}}</td>
       <td>{{ kelas.nama }}</td>
       <td>{{ kelas.kompetensi_keahlian }}</td>
-            <td>
+            <td class="d-flex gap-3">
               <button>edit</button>
-              <button>delete</button>
+              <PrimaryButton type="button" class="btn-danger" @click="saveKelasId(kelas.id)"  data-bs-toggle="modal" data-bs-target="#modalKelasDelete" title="Hapus Kelas" />
             </td>
     </tr>
     </tbody>
@@ -72,6 +79,7 @@ const showForm = () => {
   </table>
   <div class="" >
     <CreateKelas @list-kelas="showForm()"/>
+    <DeleteKelas @list-kelas="showForm()" :kelas-id="id"/>
   </div>
 </template>
 
