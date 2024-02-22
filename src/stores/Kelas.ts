@@ -14,12 +14,12 @@ export const kelasApiStore = defineStore('kelasApiStore', () => {
         return await axios.post(apiUrl + pathUrl, request)
     }
     async function postUpdate(request:object, id:string, pathUrl:string) {
-        return await axios.put(apiUrl + pathUrl + `/${id}`, request)
+        return await axios.post(apiUrl + pathUrl + `/${id}`, request)
     }
     async function postDelete(id:any, pathUrl:string) {
         return await axios.post(apiUrl + pathUrl + `/${id}`)
     }
-    async function getById(id:string, pathUrl:string) {
+    async function getById(id:any, pathUrl:string) {
         return await axios.get(apiUrl + pathUrl + `/${id}`)
     }
     async function getAll(pathUrl:string) {
@@ -53,7 +53,7 @@ export const useKelasStore = defineStore('useKelasStore', () => {
         return await getAll('kelas')
     }
     async function getKelasById(id:string){
-        return await getById(id, 'kelas')
+        return await getById(id, 'kelas/edit')
     }
 
     return {createKelas, updateKelas, deleteKelas, getAllKelas, getKelasById, kelas, kelasList}

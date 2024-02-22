@@ -3,7 +3,8 @@ import {Kelas, useKelasStore} from "@/stores/Kelas";
 import {reactive} from "vue";
 
 const {createKelas} = useKelasStore()
-const emit = defineEmits(['list-kelas'])
+
+const emit = defineEmits(['list-kelas', 'message-kelas'])
 let kelasState = reactive({
   nama: '',
   kompetensi_keahlian:''
@@ -17,7 +18,7 @@ const createKelasModel = async () => {
       kelasState.nama = ''
       kelasState.kompetensi_keahlian = ''
       emit('list-kelas')
-      localStorage.setItem('message', response.data.message)
+      emit('message-kelas', response.data.message)
     }
   } catch (error) {
     console.error(error?.message)

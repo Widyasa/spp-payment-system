@@ -5,8 +5,9 @@ import {onMounted, ref} from "vue";
 import PrimaryButton from "@/components/PrimaryButton.vue";
 import CreateKelas from "@/components/Kelas/CreateKelas.vue";
 import DeleteKelas from "@/components/Kelas/DeleteKelas.vue";
+import EditKelas from "@/components/Kelas/EditKelas.vue";
 
-
+const message = ref('')
 const id = ref('')
 const response = ref(false)
 const messageResponse = localStorage.getItem('message')
@@ -17,31 +18,31 @@ const getKelasModel = async ()  => {
     const response = await getAllKelas()
     const {data, message} = response.data
     kelasList.value = data.kelases
-    console.log(message)
   } catch (e) {
-    console.error('api error', e?.message)
+    console.error('api error', e)
   }
 }
+
 onMounted(() => {
   getKelasModel()
 })
 const showForm = () => {
-  if (messageResponse != null){
-    response.value = true
-    setInterval(() => {
-      localStorage.removeItem('mesaage')
-      response.value = false
-    }, 3000)
-  }
   getKelasModel()
 }
 const saveKelasId = (kelasId:string) => {
   id.value = kelasId
 }
+const showMessage = (theMessage:string) => {
+  message.value = theMessage
+}
+setInterval(() => {
+  message.value=''
+}, 3000)
 
 </script>
 
 <template>
+  <h3 class="text-success">{{message}}</h3>
   <h3 class="text-success" v-show="response">{{messageResponse}}</h3>
   <PrimaryButton type="button" class="mt-5"  data-bs-toggle="modal" data-bs-target="#modalKelasCreate" title="Tambah Kelas" />
 
@@ -62,7 +63,7 @@ const saveKelasId = (kelasId:string) => {
       <td>{{ kelas.nama }}</td>
       <td>{{ kelas.kompetensi_keahlian }}</td>
             <td class="d-flex gap-3">
-              <button>edit</button>
+              <PrimaryButton type="button" class="btn-warning text-white" @click="saveKelasId(kelas.id)" data-bs-toggle="modal" data-bs-target="#modalKelasUpdate" title="Update Kelas" />
               <PrimaryButton type="button" class="btn-danger" @click="saveKelasId(kelas.id)"  data-bs-toggle="modal" data-bs-target="#modalKelasDelete" title="Hapus Kelas" />
             </td>
     </tr>
@@ -78,8 +79,9 @@ const saveKelasId = (kelasId:string) => {
     </tbody>
   </table>
   <div class="" >
-    <CreateKelas @list-kelas="showForm()"/>
-    <DeleteKelas @list-kelas="showForm()" :kelas-id="id"/>
+    <CreateKelas @list-kelas="showForm()" @message-kelas="showMessage"/>
+    <EditKelas @list-kelas="showForm()" @message-kelas="showMessage" :kelas-id="id"/>
+    <DeleteKelas @list-kelas="showForm()" @message-kelas="showMessage" :kelas-id="id"/>
   </div>
 </template>
 
