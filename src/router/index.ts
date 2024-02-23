@@ -32,7 +32,12 @@ const router = createRouter({
           component: ()=>import('../views/admin/Kelas/KelasIndex.vue'),
           meta: {isPrivate: true, isPetugas:true},
         },
-
+        {
+          path:'/pembayaran',
+          name:'pembayaran',
+          component: ()=>import('../views/admin/Pembayaran/PembayaranIndex.vue'),
+          meta: {isPrivate: true, isAdmin:true},
+        },
       ]
     },
 
