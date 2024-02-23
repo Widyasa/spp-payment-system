@@ -22,6 +22,9 @@ const logout = () => {
       <li class="nav-link" v-show="admin || petugas">
         <RouterLink class="nav" :to="{name: 'kelas'}" active-class="active">Kelas</RouterLink>
       </li>
+      <li class="nav-link" v-show="admin">
+        <RouterLink class="nav" :to="{name: 'pembayaran'}" active-class="active">Pembayaran</RouterLink>
+      </li>
       <li class="nav-link mt-5">
         <button @click="logout" class="btn btn-primary">Logout</button>
       </li>
