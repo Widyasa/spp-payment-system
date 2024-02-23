@@ -10,7 +10,6 @@ import EditKelas from "@/components/Kelas/EditKelas.vue";
 const message = ref('')
 const id = ref('')
 const response = ref(false)
-const messageResponse = localStorage.getItem('message')
 const {getAllKelas} = useKelasStore()
 const {kelas, kelasList} = storeToRefs(useKelasStore())
 const getKelasModel = async ()  => {
@@ -43,14 +42,12 @@ setInterval(() => {
 
 <template>
   <h3 class="text-success">{{message}}</h3>
-  <h3 class="text-success" v-show="response">{{messageResponse}}</h3>
   <PrimaryButton type="button" class="mt-5"  data-bs-toggle="modal" data-bs-target="#modalKelasCreate" title="Tambah Kelas" />
 
   <table class="table table-border">
     <thead>
     <tr>
       <th>No.</th>
-      <th>id</th>
       <th>Nama</th>
       <th>Kompetensi Keahlian</th>
       <th>Actions</th>
@@ -59,7 +56,6 @@ setInterval(() => {
     <tbody v-if="kelasList.length > 0">
     <tr v-for="(kelas, index) in kelasList" :key="kelas.id">
       <td>{{ index+1 }}</td>
-      <td>{{kelas.id}}</td>
       <td>{{ kelas.nama }}</td>
       <td>{{ kelas.kompetensi_keahlian }}</td>
             <td class="d-flex gap-3">
