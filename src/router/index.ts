@@ -23,8 +23,22 @@ const router = createRouter({
         {
           path:'/siswa',
           name:'siswa',
-          component: ()=>import('../views/admin/Siswa/SiswaIndex.vue'),
+          component: ()=>import('../views/admin/Siswa/SiswaLayouts.vue'),
           meta: {isPrivate: true, isPetugas:true},
+          children:[
+            {
+              path:'/siswa',
+              name:'siswaIndex',
+              component: ()=>import('../views/admin/Siswa/SiswaIndex.vue'),
+              meta: {isPrivate: true, isPetugas:true},
+            },
+            {
+              path:'/siswa/tambah',
+              name:'siswaCreate',
+              component: ()=>import('../views/admin/Siswa/SiswaCreate.vue'),
+              meta: {isPrivate: true, isPetugas:true},
+            }
+          ]
         },
         {
           path:'/kelas',
