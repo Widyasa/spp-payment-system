@@ -69,7 +69,7 @@ watch(() => props.pembayaranId, async (newValue, oldValue) => {
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="emit('list-pembayaran')">Close</button>
-            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Ubah Pembayaran</button>
+            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Simpan Perubahan</button>
           </div>
         </form>
       </div>
